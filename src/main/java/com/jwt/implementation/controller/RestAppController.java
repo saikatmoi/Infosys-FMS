@@ -32,6 +32,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.jwt.implementation.config.JwtGeneratorValidator;
 
 import com.jwt.implementation.model.LoginSuccess;
+import com.jwt.implementation.model.Message;
 import com.jwt.implementation.model.ResponseFile;
 import com.jwt.implementation.model.Role;
 import com.jwt.implementation.model.User;
@@ -119,25 +120,32 @@ public class RestAppController {
 	@CrossOrigin
 	@GetMapping("/welcomeAdmin")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public String welcome() {
+	public ResponseEntity<Message> welcomeAdmin() {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		String username = userDetails.getUsername();
-		User authRole = userRepo.findByUserName(username);
-		Role checkRole = roleRepo.findByRole("admin");
-		if (authRole.getRole().contains(checkRole)) {
-			return "admin";
-		}
-		return "user";
+		// Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		// UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		// String username = userDetails.getUsername();
+		// User authRole = userRepo.findByUserName(username);
+		// Role checkRole = roleRepo.findByRole("admin");
+		// if (authRole.getRole().contains(checkRole)) {
+		// 	return "admin";
+		// }
+		// return "user";
+		Message message=new Message();
+		message.setInfo("Welcome Admin"); 
+
+		return new ResponseEntity<>(message,HttpStatus.OK);
 	}
 
 	
     @CrossOrigin
 	@GetMapping("/welcomeUser")
 	@PreAuthorize("hasAuthority('ROLE_USER')")
-	public String welcomeUser() {
-		return "WelcomeUSER";
+	public ResponseEntity<Message> welcomeUser() {
+		Message message=new Message();
+		message.setInfo("Welcome User"); 
+
+		return new ResponseEntity<>(message,HttpStatus.OK);
 	}
 
 	public ResponseEntity<Object> generateRespose(String message, HttpStatus st, Object responseobj) {

@@ -82,24 +82,35 @@ public class RestAppController {
 
 	@CrossOrigin
 	@PostMapping("/genToken")
-	public LoginSuccess generateJwtToken(@RequestBody UserDTO userDto) throws Exception {
+	public ResponseEntity<LoginSuccess> generateJwtToken(@RequestBody UserDTO userDto) throws Exception {
+		Authentication authentication;
+		LoginSuccess loginSuccess;
 
-		Authentication authentication = authManager.authenticate(
+		try{
+			  authentication = authManager.authenticate(
 				new UsernamePasswordAuthenticationToken(userDto.getUserName(), userDto.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		LoginSuccess loginSuccess = new LoginSuccess();
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+		 loginSuccess = new LoginSuccess();
 		loginSuccess.setToken(jwtGenVal.generateToken(authentication));
-
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		String username = userDetails.getUsername();
+		System.out.println(username);
 		User authRole = userRepo.findByUserName(username);
+		loginSuccess.setUserName(username);
 		Role checkRole = roleRepo.findByRole("ROLE_ADMIN");
 		if (authRole.getRole().contains(checkRole)) {
 			loginSuccess.setRole("admin");
 		} else {
 			loginSuccess.setRole("user");
 		}
-		return loginSuccess;
+		return new ResponseEntity<>(loginSuccess,HttpStatus.OK) ;
+		}
+		catch(Exception e){
+             System.out.println(e);
+			 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+        
+		
 
 	}
 

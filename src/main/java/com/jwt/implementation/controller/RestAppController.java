@@ -67,18 +67,24 @@ public class RestAppController {
 
     @CrossOrigin
 	@PostMapping("/registration")
-	public ResponseEntity<Object> registerUser(@RequestBody UserDTO userDto) {
+	public ResponseEntity<Message> registerUser(@RequestBody UserDTO userDto) {
 		// User users = userService.save(userDto);
-		try {
+		Message message=new Message();
+		
 			User users = userService.save(userDto);
-			return generateRespose("User saved successfully : " + users.getId(), HttpStatus.OK, users);
-			// Handle successful save
-		} catch (NullPointerException e) {
-			// Handle the case where the email or username already exists
-			return generateRespose("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST, userDto);
-			// System.out.println("Error: " + e.getMessage());
-		}
+			if(users!= null){
+				message.setInfo("Successfully Registered. Please Login.");
+				return new ResponseEntity<>(message,HttpStatus.OK);
+			}
+			else{
+				message.setInfo("Email/Usename/Phone already exists.");
+			 return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+			}
+			
+		   
 
+
+		
 	}
 
 	@CrossOrigin

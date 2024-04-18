@@ -52,6 +52,11 @@ public class DefaultUserServiceImpl implements DefaultUserService{
 			System.out.println("already Exists");
 			return null;
 		}
+
+		if (userRepo.existsByUserPhone(userRegisteredDTO.getUserPhone())) {
+			System.out.println("already Exists");
+			return null;
+		}
 		Role role = new Role();
 		if(userRegisteredDTO.getRole().equals("USER"))
 		  role = roleRepo.findByRole("ROLE_USER");

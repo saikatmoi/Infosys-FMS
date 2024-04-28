@@ -21,4 +21,8 @@ public class FlightService {
 
     }
 
+    public List<Flight> getFlightList() {
+        return flightRepository.findAll();
+    }
+
 }

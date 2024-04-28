@@ -41,6 +41,14 @@ public class AirportController {
        
     }
 
+    @GetMapping("/flights")
+    public ResponseEntity<?> getFlightList() {
+
+    List<Flight> flights= flightService.getFlightList();
+    return new ResponseEntity<>(flights,HttpStatus.OK);
+       
+    }
+
 
 
 }

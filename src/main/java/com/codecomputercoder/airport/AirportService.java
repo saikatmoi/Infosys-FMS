@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.codecomputercoder.entity.Airport;
+import com.codecomputercoder.entity.Flight;
 import com.codecomputercoder.repository.AirportRepository;
 
 @Service

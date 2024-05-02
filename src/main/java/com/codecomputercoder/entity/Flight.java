@@ -1,9 +1,13 @@
 package com.codecomputercoder.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +23,9 @@ public class Flight {
     private int seatCapacity;
     private String carrierName;
     private String model;
+
+    @OneToMany(mappedBy = "flight")
+    private List<ScheduledFlight> scheduledFlights;
 
 
 }

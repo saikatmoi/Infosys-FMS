@@ -3,10 +3,16 @@ package com.codecomputercoder.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +30,19 @@ public class Flight {
     private String carrierName;
     private String model;
 
-    @OneToMany(mappedBy = "flight")
-    private List<ScheduledFlight> scheduledFlights;
+    @JsonIgnore
+    @OneToMany(mappedBy = "flight",fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+    private List<ScheduledFlight> scheduledFlights=new ArrayList<>();
 
+
+    public void addScheduledFlight(ScheduledFlight scheduledFlight) {
+        scheduledFlights.add(scheduledFlight);
+        //scheduledFlight.setFlight(this);
+    }
+
+    // public void removeScheduledFlight(ScheduledFlight scheduledFlight) {
+    //     scheduledFlights.remove(scheduledFlight);
+    //     scheduledFlight.setFlight(null);
+    // }
 
 }

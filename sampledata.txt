@@ -1,0 +1,32 @@
+INSERT INTO public.airport (airport_code, airport_location, airport_name) 
+VALUES 
+    (1, 'Delhi', 'Indira Gandhi International Airport'),
+    (2, 'Mumbai', 'Chhatrapati Shivaji Maharaj International Airport'),
+    (3, 'Bangalore', 'Kempegowda International Airport Bengaluru'),
+    (4, 'Chennai', 'Chennai International Airport'),
+    (5, 'Kolkata', 'Netaji Subhas Chandra Bose International Airport'),
+    (6, 'Hyderabad', 'Rajiv Gandhi International Airport'),
+    (7, 'Ahmedabad', 'Sardar Vallabhbhai Patel International Airport'),
+    (8, 'Pune', 'Pune Airport'),
+    (9, 'Goa', 'Goa International Airport'),
+    (10, 'Jaipur', 'Jaipur International Airport'),
+    (11, 'Lucknow', 'Chaudhary Charan Singh International Airport'),
+    (12, 'Kochi', 'Cochin International Airport'),
+    (13, 'Thiruvananthapuram', 'Trivandrum International Airport'),
+    (14, 'Guwahati', 'Lokpriya Gopinath Bordoloi International Airport'),
+    (15, 'Bhubaneswar', 'Biju Patnaik International Airport');
+
+
+
+INSERT INTO public.flight (flight_number, seat_capacity, carrier_name, model) 
+VALUES
+    (1, 200, 'AirlineX', 'Boeing 737'),
+    (2, 250, 'AirlineY', 'Airbus A320'),
+    (3, 180, 'AirlineZ', 'Boeing 787'),
+    (4, 220, 'AirlineX', 'Airbus A380'),
+    (5, 190, 'AirlineY', 'Boeing 747'),
+    (6, 210, 'AirlineZ', 'Boeing 737'),
+    (7, 230, 'AirlineX', 'Boeing 777'),
+    (8, 170, 'AirlineY', 'Airbus A330'),
+    (9, 240, 'AirlineZ', 'Boeing 787'),
+    (10, 200, 'AirlineX', 'Airbus A320');

@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,13 +26,13 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @ManyToOne
     private ScheduledFlight scheduledFlight;
     
     @ManyToOne
     private UserInfo user;
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     private List<Passenger> passengerList;
 

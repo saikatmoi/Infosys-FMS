@@ -23,6 +23,7 @@ public class FlightService {
     }
 
     public List<Flight> getFlightList() {
+        System.out.println("Received Request");
         return flightRepository.findAll();
     }
 
@@ -57,5 +58,6 @@ public class FlightService {
         }
         
     }
+
 
 }

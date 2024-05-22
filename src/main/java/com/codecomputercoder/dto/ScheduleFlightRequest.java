@@ -13,6 +13,8 @@ public class ScheduleFlightRequest {
 
     private int flightNumber;
     private Schedule schedule;
+    private int ticketPrice;
+
     
     
 }

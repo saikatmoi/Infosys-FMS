@@ -14,7 +14,7 @@ import com.codecomputercoder.entity.ScheduledFlight;
 public interface ScheduledFlightRepository extends JpaRepository<ScheduledFlight,Integer> {
 
 
-    List<ScheduledFlight> findByScheduleSourceAirportAndScheduleDestinationAirportAndScheduleDepartureTimeBetween(
-            Airport sourceAirport, Airport destinationAirport, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<ScheduledFlight> findByScheduleSourceAirportAndScheduleDestinationAirport(
+            Airport sourceAirport, Airport destinationAirport);
 
 }

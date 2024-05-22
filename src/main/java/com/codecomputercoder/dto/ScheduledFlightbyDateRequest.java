@@ -1,6 +1,7 @@
 package com.codecomputercoder.dto;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.codecomputercoder.entity.Airport;
 
@@ -15,5 +16,5 @@ import lombok.NoArgsConstructor;
 public class ScheduledFlightbyDateRequest {
 private Airport srcAirport;
 private Airport desAirport;
-private LocalDate date;
+private String date;
 }

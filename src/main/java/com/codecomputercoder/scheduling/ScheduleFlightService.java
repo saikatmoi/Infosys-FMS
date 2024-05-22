@@ -4,11 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.codecomputercoder.dto.ScheduleFlightRequest;
+import com.codecomputercoder.email.EmailServiceImpl;
 import com.codecomputercoder.entity.Airport;
+import com.codecomputercoder.entity.EmailDetails;
 import com.codecomputercoder.entity.Flight;
 import com.codecomputercoder.entity.Schedule;
 import com.codecomputercoder.entity.ScheduledFlight;
@@ -25,6 +30,8 @@ public class ScheduleFlightService {
     private ScheduleRepository scheduleRepository;
     @Autowired
     private FlightRepository flightRepository;
+    @Autowired
+    private EmailServiceImpl emailServiceImpl;
 
     public void scheduleNewFlight(ScheduleFlightRequest scheduleFlightRequest) {
 
@@ -34,6 +41,9 @@ public class ScheduleFlightService {
     ScheduledFlight scheduledFlight = new ScheduledFlight();
     scheduledFlight.setFlight(flight);
     scheduledFlight.setSchedule(schedule);
+    scheduledFlight.setBookedSeats(0);
+    scheduledFlight.setTicketPrice(scheduleFlightRequest.getTicketPrice());
+
     flight.addScheduledFlight(scheduledFlight);
 
     if (scheduleRepository.existsBySourceAirportAndDestinationAirportAndArrivalTimeAndDepartureTime(
@@ -50,13 +60,29 @@ public class ScheduleFlightService {
     }
 
     public List<ScheduledFlight> viewScheduledFlights(){
+        EmailDetails emailDetails=new EmailDetails("saikatmoi2@gmail.com","Test Email","Testing","");
+        emailServiceImpl.sendSimpleMail(emailDetails);
         return scheduleFlightRepository.findAll();
     }
 
 
-    public List<ScheduledFlight> viewScheduledFlightsbyDate(Airport origin, Airport destination, LocalDate date) {
-        return scheduleFlightRepository.findByScheduleSourceAirportAndScheduleDestinationAirportAndScheduleDepartureTimeBetween(
-                origin, destination, date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+    public List<ScheduledFlight> viewScheduledFlightsbyDate(Airport origin, Airport destination, String date) {
+        List<ScheduledFlight> allFlights =scheduleFlightRepository.findByScheduleSourceAirportAndScheduleDestinationAirport(
+            origin, destination);
+        
+            List<ScheduledFlight> flightsByDate=new ArrayList<ScheduledFlight>();
+            for(ScheduledFlight it: allFlights){
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+                
+                String flightdate=sdf.format(it.getSchedule().getArrivalTime());
+                System.out.println(flightdate+"  "+date);
+                if(flightdate.equals(date)){
+                    flightsByDate.add(it);
+                }
+                
+            }
+
+        return flightsByDate;
     }
 
 

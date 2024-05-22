@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Booking Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 12px #aaa;
+        }
+        .header {
+            text-align: center;
+        }
+        .details {
+            margin-top: 20px;
+        }
+        .details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .details th, .details td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .details th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Booking Confirmation</h1>
+    </div>
+    <div class="details">
+
+        <h2>User Information</h2>
+        <p><strong>Name:</strong> <span th:text="${booking.user.userName}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${booking.user.email}"></span></p>
+
+
+        <h2>Booking Details</h2>
+        <p><strong>Booking ID:</strong> <span th:text="${booking.id}"></span></p>
+        <p><strong>Booking Date:</strong> <span th:text="${booking.bookingDate}"></span></p>
+        <p><strong>Ticket Cost:</strong> $<span th:text="${booking.ticketCost}"></span></p>
+
+        <h2>Flight Details</h2>
+        <p><strong>Flight Number:</strong> <span th:text="${booking.scheduledFlight.flight.flightNumber}"></span></p>
+        <p><strong>Flight Carrier Name:</strong> <span th:text="${booking.scheduledFlight.flight.carrierName}"></span></p>
+        <p><strong>Flight Number:</strong> <span th:text="${booking.scheduledFlight.flight.model}"></span></p>
+
+
+        <h2>Source Details</h2>
+        <p><strong>Departure:</strong> <span th:text="${booking.scheduledFlight.schedule.departureTime}"></span></p>
+        <p><strong>Arrival:</strong> <span th:text="${booking.scheduledFlight.schedule.arrivalTime}"></span></p>
+        <p><strong>Src Airport</strong> <span th:text="${booking.scheduledFlight.schedule.sourceAirport.airportName}"></span></p>
+
+
+        <h2>Destination Details</h2>
+        <p><strong>Dst Airport</strong> <span th:text="${booking.scheduledFlight.schedule.destinationAirport.airportName}"></span></p>
+
+        <h2>Passenger List</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>PNR Number</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>UIN</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="passenger : ${booking.passengerList}">
+                <td th:text="${passenger.pnrNumber}"></td>
+                <td th:text="${passenger.name}"></td>
+                <td th:text="${passenger.age}"></td>
+                <td th:text="${passenger.uin}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

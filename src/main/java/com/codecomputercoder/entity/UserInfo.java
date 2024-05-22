@@ -28,7 +28,7 @@ public class UserInfo {
     private String email;
 	private BigInteger userPhone;
     private String role;
-    // @JsonIgnore
-    // @OneToMany(mappedBy = "user")
-    // private List<Booking> bookings;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
 }

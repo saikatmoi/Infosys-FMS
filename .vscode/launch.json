@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-SpringSecurityLatestApplication<spring-security-latest>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.codecomputercoder.SpringSecurityLatestApplication",
+      "projectName": "spring-security-latest",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

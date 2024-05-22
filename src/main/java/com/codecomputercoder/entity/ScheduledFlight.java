@@ -36,10 +36,14 @@ public class ScheduledFlight {
     //@JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     private Schedule schedule;
+
+
+    private int ticketPrice;
+    private int bookedSeats;
     
     // @JsonIgnore
-    // @OneToMany(mappedBy = "scheduledFlight")
-    // private List<Booking> bookings=new ArrayList<>();
+    @OneToMany(mappedBy = "scheduledFlight")
+    private List<Booking> bookings=new ArrayList<>();
 
 
 

@@ -28,11 +28,13 @@ public class Booking {
     private Long id;
     
     @ManyToOne
+    @JsonIgnore
     private ScheduledFlight scheduledFlight;
     
     @ManyToOne
     private UserInfo user;
-    @JsonIgnore
+
+    //@JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     private List<Passenger> passengerList;
 

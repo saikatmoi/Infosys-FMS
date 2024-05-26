@@ -13,8 +13,6 @@ import com.codecomputercoder.entity.Booking;
 import com.codecomputercoder.entity.ScheduledFlight;
 import com.codecomputercoder.entity.UserInfo;
 import com.codecomputercoder.repository.BookingRepository;
-import com.codecomputercoder.repository.FlightRepository;
-import com.codecomputercoder.repository.ScheduleRepository;
 import com.codecomputercoder.repository.ScheduledFlightRepository;
 import com.codecomputercoder.repository.UserInfoRepository;
 
@@ -31,10 +29,14 @@ public class BookingService {
     @Autowired
     private EmailServiceImpl emailService;
 
-    public void booktickets(BookingRequest bookingRequest) {
+    public Boolean booktickets(BookingRequest bookingRequest) {
         Booking booking =new Booking();
         ScheduledFlight scheduledFlight=scheduleFlightRepository.findById(bookingRequest.getScheduledFlightId()).get();
         UserInfo user=userRepository.findById(bookingRequest.getUserId()).get();
+        int availableSeats =scheduledFlight.getFlight().getSeatCapacity()-scheduledFlight.getBookedSeats();
+        if(availableSeats<bookingRequest.getPassengerList().size()){
+            return false;
+        }
         booking.setPassengerList(bookingRequest.getPassengerList());
         booking.setTicketCost(bookingRequest.getPassengerList().size()*scheduledFlight.getTicketPrice());
         booking.setUser(user);
@@ -47,25 +49,53 @@ public class BookingService {
         booking.setScheduledFlight(scheduledFlight);
         scheduledFlight.setBookedSeats(scheduledFlight.getBookedSeats()+bookingRequest.getPassengerList().size());
         scheduledFlight.setBookings(bookings);
-
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
         scheduleFlightRepository.save(scheduledFlight);
-        bookingRepository.save(booking);
+        booking=bookingRepository.save(booking);
+        sendTicket(booking);
+        return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+        
+
+        
         
     }
 
     public List<Booking> viewBookings(String username) {
-        // TODO Auto-generated method stub
+
 
         return bookingRepository.findByUser_userName(username);
         
     }
 
+
     public Booking viewBookingById(Long bookingId) {
-        // TODO Auto-generated method stub
+
         Booking booking=bookingRepository.findById(bookingId).get();
+        return booking;
+        
+    }
 
+    public Boolean deleteBookingById(Long id) {
+        try {
+            Booking booking=bookingRepository.findById(id).get();
+            int noPassengers=booking.getPassengerList().size();
+            ScheduledFlight scheduledFlight=booking.getScheduledFlight();
+            scheduledFlight.setBookedSeats(scheduledFlight.getBookedSeats()-noPassengers);
+            scheduleFlightRepository.save(scheduledFlight);
+            bookingRepository.deleteById(id);
+            
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
+    public void sendTicket(Booking booking){
         Context context = new Context();
         // Set variables for the template from the POST request data
         context.setVariable("booking", booking);
@@ -75,8 +105,6 @@ public class BookingService {
         } catch (Exception e) {
             //return "Error sending email: " + e.getMessage();
         }
-        return booking;
-        
     }
 
 }

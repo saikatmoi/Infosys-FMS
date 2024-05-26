@@ -15,22 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codecomputercoder.airport.AirportService;
 import com.codecomputercoder.booking.BookingService;
 import com.codecomputercoder.dto.BookingRequest;
-import com.codecomputercoder.dto.ScheduleFlightRequest;
 import com.codecomputercoder.entity.Booking;
-import com.codecomputercoder.flight.FlightService;
 
 @RestController
 public class BookingController {
 
-
-
-    @Autowired
-    private AirportService airportService;
-    @Autowired
-    private FlightService flightService;
     @Autowired
     private BookingService bookingService;
 
@@ -39,17 +30,19 @@ public class BookingController {
     @PostMapping("/booktickets")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> scheduleFlight(@RequestBody BookingRequest bookingRequest) {
-      bookingService.booktickets(bookingRequest);
+     if(bookingService.booktickets(bookingRequest)) {
+      return new ResponseEntity<>(HttpStatus.CREATED);
+     }
     
 
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
        
     }
 
 
     @GetMapping("/viewbookings")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> viewBookings() {
+    public ResponseEntity<?> viewAllBookings() {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		  String username = userDetails.getUsername();
@@ -62,12 +55,23 @@ public class BookingController {
 
     @GetMapping("/viewbooking/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<?> viewBookings(@PathVariable Long id) {
+    public ResponseEntity<?> viewBooking(@PathVariable Long id) {
   
     Booking bookings=bookingService.viewBookingById(id);
     
 
     return new ResponseEntity<>(bookings,HttpStatus.OK);
+       
+    }
+
+    @GetMapping("/deletebooking/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
+    public ResponseEntity<?> deleteBookings(@PathVariable Long id) {
+  
+    Boolean value =bookingService.deleteBookingById(id);
+    
+
+    return new ResponseEntity<>(value,HttpStatus.OK);
        
     }
 

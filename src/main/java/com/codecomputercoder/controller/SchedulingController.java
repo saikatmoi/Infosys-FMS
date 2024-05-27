@@ -56,8 +56,8 @@ public class SchedulingController {
 
     @GetMapping("/getflightsbydate")
     public ResponseEntity<?> viewAllScheduledFlightsbyDate(@RequestBody ScheduledFlightbyDateRequest scheduledFlightbyDateRequest){
-        List<ScheduledFlight> scheduledFlights=scheduleFlightService.viewScheduledFlightsbyDate(scheduledFlightbyDateRequest.getSrcAirport(),
-        scheduledFlightbyDateRequest.getDesAirport(),scheduledFlightbyDateRequest.getDate());
+        List<ScheduledFlight> scheduledFlights=scheduleFlightService.viewScheduledFlightsbyDate(scheduledFlightbyDateRequest.getSrcAirportId(),
+        scheduledFlightbyDateRequest.getDesAirportId(),scheduledFlightbyDateRequest.getDate());
         //System.out.println(flight);
          
          return new ResponseEntity<>(scheduledFlights,HttpStatus.OK);

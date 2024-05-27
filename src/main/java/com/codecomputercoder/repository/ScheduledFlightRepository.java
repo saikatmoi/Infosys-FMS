@@ -17,4 +17,7 @@ public interface ScheduledFlightRepository extends JpaRepository<ScheduledFlight
     List<ScheduledFlight> findByScheduleSourceAirportAndScheduleDestinationAirport(
             Airport sourceAirport, Airport destinationAirport);
 
+    List<ScheduledFlight> findBySchedule_sourceAirport_airportCodeAndSchedule_destinationAirport_airportCode(int i,
+            int j);
+
 }

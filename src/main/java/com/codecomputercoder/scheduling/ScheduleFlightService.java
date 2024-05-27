@@ -66,9 +66,9 @@ public class ScheduleFlightService {
     }
 
 
-    public List<ScheduledFlight> viewScheduledFlightsbyDate(Airport origin, Airport destination, String date) {
-        List<ScheduledFlight> allFlights =scheduleFlightRepository.findByScheduleSourceAirportAndScheduleDestinationAirport(
-            origin, destination);
+    public List<ScheduledFlight> viewScheduledFlightsbyDate(int i, int j, String date) {
+        List<ScheduledFlight> allFlights =scheduleFlightRepository.findBySchedule_sourceAirport_airportCodeAndSchedule_destinationAirport_airportCode(
+            i, j);
         
             List<ScheduledFlight> flightsByDate=new ArrayList<ScheduledFlight>();
             for(ScheduledFlight it: allFlights){

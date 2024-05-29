@@ -17,6 +17,8 @@ import com.codecomputercoder.model.LoginSuccess;
 import com.codecomputercoder.service.AuthService;
 import com.codecomputercoder.service.JwtService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 
 
 @RestController
@@ -51,6 +53,7 @@ public class AuthController {
 
     @GetMapping("/welcomeUser")
     @PreAuthorize("hasAuthority('ROLE_USER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<Message> loggedInUser() {
         Message message=new Message();
 		message.setInfo("Welcome User"); 

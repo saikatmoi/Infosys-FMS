@@ -41,7 +41,7 @@ public class SecurityConfig {
         return http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/genToken","/registration","/airports","/flights","/flight/**","/getflightschedule/**"
-                ,"/getflightsbydate").permitAll()
+                ,"/getflightsbydate","/swagger-ui/**","/v3/api-docs/**").permitAll()
                 .and()
                 .authorizeHttpRequests().anyRequest()
                 .authenticated().and()

@@ -38,10 +38,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
+        return http.cors().and().csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/genToken","/registration","/airports","/flights","/flight/**","/getflightschedule/**"
-                ,"/getflightsbydate","/swagger-ui/**","/v3/api-docs/**").permitAll()
+                ,"/getflightsbydate","/swagger-ui/**","/v3/api-docs/**","/confirm-account").permitAll()
                 .and()
                 .authorizeHttpRequests().anyRequest()
                 .authenticated().and()

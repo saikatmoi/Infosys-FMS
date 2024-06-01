@@ -1,5 +1,6 @@
 package com.codecomputercoder.controller;
 
+import com.codecomputercoder.entity.TempUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 @RestController
+@CrossOrigin
 public class AuthController {
 
     @Autowired
@@ -38,8 +40,13 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> addNewUser(@RequestBody UserInfo userInfo) {
+    public ResponseEntity<?> addNewUser(@RequestBody TempUser userInfo) {
         return service.addUser(userInfo);
+    }
+
+    @GetMapping("/confirm-account")
+    public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirmationToken) {
+        return service.confirmEmail(confirmationToken);
     }
 
     @GetMapping("/welcomeAdmin")

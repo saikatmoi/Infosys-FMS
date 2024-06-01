@@ -9,17 +9,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.codecomputercoder.booking.BookingService;
 import com.codecomputercoder.dto.BookingRequest;
 import com.codecomputercoder.entity.Booking;
 
 @RestController
+@CrossOrigin
 public class BookingController {
 
     @Autowired
@@ -30,7 +27,7 @@ public class BookingController {
     @PostMapping("/booktickets")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> scheduleFlight(@RequestBody BookingRequest bookingRequest) {
-     if(bookingService.booktickets(bookingRequest)) {
+     if(bookingService.bookTickets(bookingRequest)) {
       return new ResponseEntity<>(HttpStatus.CREATED);
      }
     
@@ -38,7 +35,6 @@ public class BookingController {
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
        
     }
-
 
     @GetMapping("/viewbookings")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")

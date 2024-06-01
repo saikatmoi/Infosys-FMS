@@ -1,15 +1,13 @@
 package com.codecomputercoder.controller;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.codecomputercoder.dto.SearchFlightsResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.codecomputercoder.dto.ScheduleFlightRequest;
 import com.codecomputercoder.dto.ScheduledFlightbyDateRequest;
@@ -20,6 +18,7 @@ import com.codecomputercoder.scheduling.ScheduleFlightService;
 
 
 @RestController
+@CrossOrigin
 public class SchedulingController {
     @Autowired
     private ScheduleFlightService scheduleFlightService;
@@ -54,13 +53,17 @@ public class SchedulingController {
         //return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/getflightsbydate")
+    @PostMapping("/getflightsbydate")
     public ResponseEntity<?> viewAllScheduledFlightsbyDate(@RequestBody ScheduledFlightbyDateRequest scheduledFlightbyDateRequest){
         List<ScheduledFlight> scheduledFlights=scheduleFlightService.viewScheduledFlightsbyDate(scheduledFlightbyDateRequest.getSrcAirportId(),
         scheduledFlightbyDateRequest.getDesAirportId(),scheduledFlightbyDateRequest.getDate());
         //System.out.println(flight);
+        List<SearchFlightsResponseDTO> searchFlightsResponseDTOS=new ArrayList<>();
+        for(ScheduledFlight it :scheduledFlights){SearchFlightsResponseDTO temp=new SearchFlightsResponseDTO(it.getId(),it.getFlight(),it.getSchedule().getArrivalTime(),it.getSchedule().getDepartureTime(),it.getFlight().getSeatCapacity()-it.getBookedSeats(),it.getTicketPrice());
+        searchFlightsResponseDTOS.add(temp);
+        }
          
-         return new ResponseEntity<>(scheduledFlights,HttpStatus.OK);
+         return new ResponseEntity<>(searchFlightsResponseDTOS,HttpStatus.OK);
         //return new ResponseEntity<>(HttpStatus.OK);
     }
 

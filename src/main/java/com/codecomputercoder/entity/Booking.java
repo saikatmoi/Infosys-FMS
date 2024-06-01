@@ -28,7 +28,7 @@ public class Booking {
     private Long id;
     
     @ManyToOne
-    @JsonIgnore
+    //@JsonIgnore
     private ScheduledFlight scheduledFlight;
     
     @ManyToOne

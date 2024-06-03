@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Flight</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            width: 500px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input,
+        .form-group select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #responseMessage {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .centered-link {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Schedule Flight</h1>
+        <form id="scheduleFlightForm">
+            <div class="form-group">
+                <label for="flightNumber">Flight Number</label>
+                <select id="flightNumber" name="flightNumber" required>
+                    <option value="">Select Flight</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sourceAirport">Source Airport</label>
+                <select id="sourceAirport" name="sourceAirport" required>
+                    <option value="">Select Source Airport</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="destinationAirport">Destination Airport</label>
+                <select id="destinationAirport" name="destinationAirport" required>
+                    <option value="">Select Destination Airport</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="arrivalTime">Arrival Time</label>
+                <input type="datetime-local" id="arrivalTime" name="arrivalTime" required>
+            </div>
+            <div class="form-group">
+                <label for="departureTime">Departure Time</label>
+                <input type="datetime-local" id="departureTime" name="departureTime" required>
+            </div>
+           
+            <div class="form-group">
+                <label for="ticketPrice">Ticket Price</label>
+                <input type="number" id="ticketPrice" name="ticketPrice" required>
+            </div>
+            <button type="submit">Schedule Flight</button>
+        </form>
+        <p id="responseMessage"></p>
+        <div class="centered-link">
+            <a href="admin.html">Go Back to the Admin Page</a>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scheduleFlightForm = document.getElementById('scheduleFlightForm');
+            const responseMessage = document.getElementById('responseMessage');
+            const flightNumberSelect = document.getElementById('flightNumber');
+            const sourceAirportSelect = document.getElementById('sourceAirport');
+            const destinationAirportSelect = document.getElementById('destinationAirport');
+            const jwtToken = localStorage.getItem('Token');
+
+            // Fetch flights
+            fetch('http://localhost:8080/flights', {
+                headers: {
+                   
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(flight => {
+                    const option = document.createElement('option');
+                    option.value = flight.flightNumber;
+                    option.textContent = `Flight ${flight.flightNumber} - ${flight.carrierName} -${flight.model}`;
+                    flightNumberSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching flights:', error));
+
+            // Fetch airports
+            fetch('http://localhost:8080/airports', {
+                headers: {
+                    
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(airport => {
+                    const optionSrc = document.createElement('option');
+                    optionSrc.value = airport.airportCode;
+                    optionSrc.textContent = `${airport.airportName} ( ${airport.airportLocation})`;
+                    sourceAirportSelect.appendChild(optionSrc);
+
+                    const optionDst = document.createElement('option');
+                    optionDst.value = airport.airportCode;
+                    optionDst.textContent = `${airport.airportName} ( ${airport.airportLocation})`;
+                    destinationAirportSelect.appendChild(optionDst);
+                });
+            })
+            .catch(error => console.error('Error fetching airports:', error));
+
+            // Handle form submission
+            scheduleFlightForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(scheduleFlightForm);
+                const scheduleFlightRequest = {
+                    flightNumber: parseInt(formData.get('flightNumber')),
+                    schedule: {
+                        sourceAirport: { airportCode: parseInt(formData.get('sourceAirport')) },
+                        destinationAirport: { airportCode: parseInt(formData.get('destinationAirport')) },
+                        departureTime: formData.get('departureTime'),
+                        arrivalTime: formData.get('arrivalTime')
+                    },
+                    ticketPrice: parseInt(formData.get('ticketPrice'))
+                };
+                 console.log(scheduleFlightRequest)
+                try {
+                    const response = await fetch('http://localhost:8080/scheduleflight', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${jwtToken}`
+                        },
+                        body: JSON.stringify(scheduleFlightRequest)
+
+                    });
+
+                    if (response.ok) {
+                        responseMessage.textContent = 'Flight scheduled successfully!';
+                        responseMessage.style.color = 'green';
+                    } else {
+                        const errorData = await response.json();
+                        responseMessage.textContent = `Error: ${errorData.message}`;
+                        responseMessage.style.color = 'red';
+                    }
+                } catch (error) {
+                    responseMessage.textContent = 'An error occurred. Please try again.';
+                    responseMessage.style.color = 'red';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

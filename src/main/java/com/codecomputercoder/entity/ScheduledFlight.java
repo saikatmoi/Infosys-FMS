@@ -35,7 +35,7 @@ public class ScheduledFlight {
     private int bookedSeats;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "scheduledFlight")
+    @OneToMany(mappedBy = "scheduledFlight",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Booking> bookings = new ArrayList<>();
 
 

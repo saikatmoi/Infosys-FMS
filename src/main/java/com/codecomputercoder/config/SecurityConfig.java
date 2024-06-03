@@ -41,7 +41,7 @@ public class SecurityConfig {
         return http.cors().and().csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/genToken","/registration","/airports","/flights","/flight/**","/getflightschedule/**"
-                ,"/getflightsbydate","/swagger-ui/**","/v3/api-docs/**","/confirm-account").permitAll()
+                ,"/getflightsbydate","/swagger-ui/**","/v3/api-docs/**","/confirm-account","/getscheduledflight/**","/confirm-account/**").permitAll()
                 .and()
                 .authorizeHttpRequests().anyRequest()
                 .authenticated().and()

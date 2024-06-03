@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .details-section {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .details-section div {
+            width: 48%;
+            margin-bottom: 20px;
+        }
+        .booking-details, .passenger-list {
+            margin-bottom: 20px;
+        }
+        .passenger-list th, .passenger-list td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .passenger-list th {
+            background-color: #4caf50;
+            color: white;
+        }
+        .passenger-list tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        h1, h2 {
+            color: #4caf50;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .download-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Booking Details</h1>
+    <div class="details-section">
+        <div class="booking-details" id="bookingDetails">
+            <!-- Booking details will be displayed here -->
+        </div>
+        <div>
+            <h2>User Information</h2>
+            <p><strong>Name:</strong> <span id="userName"></span></p>
+            <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        </div>
+    </div>
+    <div class="details-section">
+        <div>
+            <h2>Flight Information</h2>
+            <p><strong>Flight Number:</strong> <span id="flightNumber"></span></p>
+            <p><strong>Carrier Name:</strong> <span id="carrierName"></span></p>
+            <p><strong>Model:</strong> <span id="flightModel"></span></p>
+        </div>
+        <div>
+            <h2>Schedule Information</h2>
+            <p><strong>Departure:</strong> <span id="departureTime"></span></p>
+            <p><strong>Arrival:</strong> <span id="arrivalTime"></span></p>
+            <p><strong>Source Airport:</strong> <span id="sourceAirport"></span></p>
+            <p><strong>Destination Airport:</strong> <span id="destinationAirport"></span></p>
+        </div>
+    </div>
+    <div class="passenger-list">
+        <h2>Passenger List</h2>
+        <table id="passengerTable">
+            <thead>
+                <tr>
+                    <th>PNR Number</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>UIN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Passenger details will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+    <button class="download-btn" id="downloadTicketBtn">Download Ticket</button>
+    <a class="download-btn" id="backTicketBtn" href="mybookings.html">Back</a>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="bookingdetails.js"></script>
+</body>
+</html>

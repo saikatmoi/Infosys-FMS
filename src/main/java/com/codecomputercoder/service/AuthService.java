@@ -60,13 +60,13 @@ public class AuthService {
 		EmailDetails emailDetails=new EmailDetails();
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		emailDetails.setRecipient(userInfo.getEmail());
-		emailDetails.setSubject("Complete Registration!");
+		emailDetails.setSubject("Complete Infosys-FMS Registration!");
 		emailDetails.setMsgBody("To confirm your account, please click here : "
 				+"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
 		emailService.sendSimpleMail(emailDetails);
 
 		System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
-		return new ResponseEntity<>("Verify email by the link sent on your email address",HttpStatus.OK);
+		return new ResponseEntity<>("Activate your account by the link sent to your email address",HttpStatus.OK);
     }
 
 

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Flight to Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group.select-inline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-group select, .form-group input[type="date"] {
+            width: calc(50% - 10px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px 0;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+        button:hover:enabled {
+            background-color: #218838;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        .flight-item {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            margin-bottom: 10px;
+        }
+        .flight-item p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .actions a {
+            display: inline-block;
+            padding: 8px 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .actions a.update {
+            background-color: #007bff;
+        }
+        .actions a.update:hover {
+            background-color: #0056b3;
+        }
+        .actions a.delete {
+            background-color: #dc3545;
+        }
+        .actions a.delete:hover {
+            background-color: #c82333;
+        }
+        .centered-link {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Search Flight to Book</h1>
+    <div class="form-group select-inline">
+        <div>
+            <label for="sourceAirport">Source Airport</label>
+            <select id="sourceAirport">
+                <option value="">Select Source Airport</option>
+            </select>
+        </div>
+        <div>
+            <label for="destinationAirport">Destination Airport</label>
+            <select id="destinationAirport">
+                <option value="">Select Destination Airport</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="travelDate">Travel Date</label>
+        <input type="date" id="travelDate">
+    </div>
+    <button id="searchButton" disabled>Search Flights</button><br>
+    <div class="centered-link">
+        <a href="mybookings.html">Show My Bookings</a>
+    </div>
+    <div id="results"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const sourceAirportSelect = document.getElementById("sourceAirport");
+    const destinationAirportSelect = document.getElementById("destinationAirport");
+    const travelDateInput = document.getElementById("travelDate");
+    const searchButton = document.getElementById("searchButton");
+    const resultsDiv = document.getElementById("results");
+
+    const jwtToken = localStorage.getItem("Token");
+
+    // Fetch airports data
+    fetch("http://localhost:8080/airports", {
+        headers: {}
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(airport => {
+            const option = document.createElement("option");
+            option.value = airport.airportCode;
+            option.textContent = `${airport.airportName} (${airport.airportLocation})`;
+            sourceAirportSelect.appendChild(option);
+
+            const option2 = option.cloneNode(true);
+            destinationAirportSelect.appendChild(option2);
+        });
+    })
+    .catch(error => console.error("Error fetching airports:", error));
+
+    // Enable search button when all fields are filled
+    [sourceAirportSelect, destinationAirportSelect, travelDateInput].forEach(element => {
+        element.addEventListener("input", () => {
+            searchButton.disabled = !(sourceAirportSelect.value && destinationAirportSelect.value && travelDateInput.value);
+        });
+    });
+
+    // Handle search button click
+    searchButton.addEventListener("click", () => {
+        const srcAirportId = sourceAirportSelect.value;
+        const desAirportId = destinationAirportSelect.value;
+        const date = travelDateInput.value;
+
+        // Fetch flights based on selected criteria
+        fetch("http://localhost:8080/getflightsbydate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ srcAirportId, desAirportId, date })
+        })
+        .then(response => response.json())
+        .then(data => {
+            resultsDiv.innerHTML = ""; // Clear previous results
+
+            if (data.length === 0) {
+                resultsDiv.innerHTML = "<p>No flights found.</p>";
+            } else {
+                data.forEach(flight => {
+                    const flightItem = document.createElement("div");
+                    flightItem.classList.add("flight-item");
+                    flightItem.innerHTML = `
+                        <p><strong>Flight ${flight.flight.flightNumber}</strong> - ${flight.flight.carrierName} (${flight.flight.model})</p>
+                        <p><strong>Departure Time:</strong> ${new Date(flight.departureTime).toLocaleString()}</p>
+                        <p><strong>Arrival Time:</strong> ${new Date(flight.arrivalTime).toLocaleString()}</p>
+                        <p><strong>Available Seats:</strong> ${flight.availableSeats}</p>
+                        <p><strong>Ticket Price:</strong> ${flight.ticketPrice} INR</p>
+                        <div class="actions">
+                            <a href="book.html?scheduledFlightId=${flight.id}" class="update">Book Now</a>
+                        </div>
+                    `;
+                    resultsDiv.appendChild(flightItem);
+                });
+
+                // Add event listeners to delete buttons
+                document.querySelectorAll(".delete").forEach(button => {
+                    button.addEventListener("click", event => {
+                        event.preventDefault();
+                        const flightId = button.getAttribute("data-id");
+                        if (confirm("Are you sure you want to delete this flight?")) {
+                            fetch(`http://localhost:8080/deletescheduledflight/${flightId}`, {
+                                method: "DELETE",
+                                headers: {
+                                    Authorization: `Bearer ${jwtToken}`
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    button.parentElement.parentElement.remove();
+                                    alert("Flight deleted successfully.");
+                                } else {
+                                    alert("Failed to delete flight.");
+                                }
+                            })
+                            .catch(error => console.error("Error deleting flight:", error));
+                        }
+                    });
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching flights:", error);
+            resultsDiv.innerHTML = "<p>Error fetching flights. Please try again later.</p>";
+        });
+    });
+});
+</script>
+
+</body>
+</html>

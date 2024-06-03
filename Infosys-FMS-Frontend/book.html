@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Flight</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+        button:hover:enabled {
+            background-color: #218838;
+        }
+        #addPassengerButton {
+            background-color: #007bff;
+        }
+        #addPassengerButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Book Flight</h1>
+    <form id="bookingForm">
+        <input type="hidden" id="scheduledFlightId">
+        <div id="passengerList">
+            <div class="form-group">
+                <label for="passengerName1">Passenger Name 1</label>
+                <input type="text" id="passengerName1" required>
+                <label for="passengerAge1">Passenger Age 1</label>
+                <input type="number" id="passengerAge1" required>
+                <label for="passengerUIN1">Passenger UIN 1</label>
+                <input type="number" id="passengerUIN1" required>
+            </div>
+        </div>
+        <button type="button" id="addPassengerButton">Add Another Passenger</button>
+        <button type="submit">Book Flight</button>
+    </form>
+</div>
+
+<script src="book.js"></script>
+</body>
+</html>

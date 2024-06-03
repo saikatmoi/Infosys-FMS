@@ -2,6 +2,7 @@ package com.codecomputercoder.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.codecomputercoder.dto.ModifyScheduledFlightDTO;
 import com.codecomputercoder.dto.SearchFlightsResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,39 @@ public class SchedulingController {
         //return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/getscheduledflight/{scheduledFlightNumber}")
+    public ResponseEntity<?> viewScheduledFlight(@PathVariable Integer scheduledFlightNumber){
+        ScheduledFlight scheduledFlight=scheduleFlightService.getScheduledFlightbyId(scheduledFlightNumber);
+
+        return new ResponseEntity<>(scheduledFlight,HttpStatus.OK);
+        //return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletescheduledflight/{scheduledFlightNumber}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteScheduledFlights(@PathVariable Integer scheduledFlightNumber){
+
+
+        if(scheduleFlightService.deleteScheduledFlightbyId(scheduledFlightNumber)){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/modifyscheduledflight")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> updateScheduledFlights(@RequestBody ModifyScheduledFlightDTO modifyScheduledFlightDTO){
+
+
+        if(scheduleFlightService.modifyScheduledFlightbyId(modifyScheduledFlightDTO)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping("/getflightschedule")
     public ResponseEntity<?> viewAllScheduledFlights(){

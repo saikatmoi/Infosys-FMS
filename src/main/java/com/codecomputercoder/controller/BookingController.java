@@ -27,12 +27,20 @@ public class BookingController {
     @PostMapping("/booktickets")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> scheduleFlight(@RequestBody BookingRequest bookingRequest) {
-     if(bookingService.bookTickets(bookingRequest)) {
+     try{
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+         String username = userDetails.getUsername();
+         bookingService.bookTickets(username,bookingRequest);
       return new ResponseEntity<>(HttpStatus.CREATED);
+     }
+     catch (Exception e){
+         e.printStackTrace(); // Log the exception
+         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
      }
     
 
-    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
        
     }
 
@@ -60,7 +68,7 @@ public class BookingController {
        
     }
 
-    @GetMapping("/deletebooking/{id}")
+    @DeleteMapping("/deletebooking/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<?> deleteBookings(@PathVariable Long id) {
   

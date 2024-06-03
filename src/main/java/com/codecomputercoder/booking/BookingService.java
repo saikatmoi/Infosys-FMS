@@ -3,6 +3,7 @@ package com.codecomputercoder.booking;
 import java.util.Date;
 import java.util.List;
 
+import com.codecomputercoder.entity.EmailDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +32,11 @@ public class BookingService {
     private EmailServiceImpl emailService;
 
     @Transactional
-    public Boolean bookTickets(BookingRequest bookingRequest) {
+    public Boolean bookTickets (String username, BookingRequest bookingRequest) throws Exception{
+        System.out.println(bookingRequest);
         Booking booking = new Booking();
         ScheduledFlight scheduledFlight = scheduleFlightRepository.findById(bookingRequest.getScheduledFlightId()).get();
-        UserInfo user = userRepository.findById(bookingRequest.getUserId()).get();
+        UserInfo user = userRepository.findByUserName(username).get();
         int availableSeats = scheduledFlight.getFlight().getSeatCapacity() - scheduledFlight.getBookedSeats();
         if (availableSeats < bookingRequest.getPassengerList().size()) {
             return false;
@@ -51,15 +53,13 @@ public class BookingService {
         booking.setScheduledFlight(scheduledFlight);
         scheduledFlight.setBookedSeats(scheduledFlight.getBookedSeats() + bookingRequest.getPassengerList().size());
         scheduledFlight.setBookings(bookings);
-        try {
+
             userRepository.save(user);
             scheduleFlightRepository.save(scheduledFlight);
             booking = bookingRepository.save(booking);
             sendTicket(booking);
             return true;
-        } catch (Exception e) {
-            return false;
-        }
+
 
 
     }
@@ -87,6 +87,9 @@ public class BookingService {
             scheduledFlight.setBookedSeats(scheduledFlight.getBookedSeats() - noPassengers);
             scheduleFlightRepository.save(scheduledFlight);
             bookingRepository.deleteById(id);
+            EmailDetails emailDetails=new EmailDetails(booking.getUser().getEmail(),"","Booking Cancelled","");
+            emailDetails.setMsgBody("Your Booking with Booking Id " +id+" has been cancelled successfully.");
+            emailService.sendSimpleMail(emailDetails);
 
             return true;
         } catch (Exception e) {
@@ -99,7 +102,7 @@ public class BookingService {
         // Set variables for the template from the POST request data
         context.setVariable("booking", booking);
         try {
-            emailService.sendEmail("saikatmoi2@gmail.com", "Booking Ticket", "bookingConfirmationTemplate", context);
+            emailService.sendEmail(booking.getUser().getEmail(), "Booking Confirmation Ticket", "bookingConfirmationTemplate", context);
             //return "Email sent successfully!";
         } catch (Exception e) {
             //return "Error sending email: " + e.getMessage();

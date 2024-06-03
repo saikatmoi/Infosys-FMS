@@ -1,5 +1,7 @@
 package com.codecomputercoder.scheduling;
 
+import com.codecomputercoder.dto.ModifyScheduledFlightDTO;
+import com.codecomputercoder.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -12,11 +14,6 @@ import java.util.List;
 
 import com.codecomputercoder.dto.ScheduleFlightRequest;
 import com.codecomputercoder.email.EmailServiceImpl;
-import com.codecomputercoder.entity.Airport;
-import com.codecomputercoder.entity.EmailDetails;
-import com.codecomputercoder.entity.Flight;
-import com.codecomputercoder.entity.Schedule;
-import com.codecomputercoder.entity.ScheduledFlight;
 import com.codecomputercoder.repository.FlightRepository;
 import com.codecomputercoder.repository.ScheduleRepository;
 import com.codecomputercoder.repository.ScheduledFlightRepository;
@@ -86,5 +83,47 @@ public class ScheduleFlightService {
     }
 
 
+    public boolean deleteScheduledFlightbyId(Integer scheduledFlightNumber) {
 
+        try{
+            ScheduledFlight scheduledFlight= scheduleFlightRepository.findById(scheduledFlightNumber).get();
+            for(Booking b: scheduledFlight.getBookings()){
+              String emailId= b.getUser().getEmail();
+                EmailDetails emailDetails=new EmailDetails(emailId,"","Scheduled Flight "+scheduledFlightNumber+" Cancelled","");
+                emailDetails.setMsgBody("Your Booking with Booking Id " +b.getId()+" has been cancelled due to the cancellation of the scheduled Flight.");
+                emailServiceImpl.sendSimpleMail(emailDetails);
+            }
+            scheduleFlightRepository.deleteById(scheduledFlightNumber);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean modifyScheduledFlightbyId(ModifyScheduledFlightDTO modifyScheduledFlightDTO) {
+       try {
+           ScheduledFlight scheduledFlight = scheduleFlightRepository.findById(modifyScheduledFlightDTO.getScheduledFlightId()).get();
+           scheduledFlight.setTicketPrice(modifyScheduledFlightDTO.getTicketPrice());
+           Schedule schedule = scheduledFlight.getSchedule();
+           schedule.setArrivalTime(modifyScheduledFlightDTO.getArrivalTime());
+           schedule.setDepartureTime(modifyScheduledFlightDTO.getDepartureTime());
+           scheduledFlight.setSchedule(schedule);
+           scheduleFlightRepository.save(scheduledFlight);
+           for(Booking b: scheduledFlight.getBookings()){
+               String emailId= b.getUser().getEmail();
+               EmailDetails emailDetails=new EmailDetails(emailId,"","Scheduled Flight with ID "+modifyScheduledFlightDTO.getScheduledFlightId()+" is Modified","");
+               emailDetails.setMsgBody("Your Booking with Booking Id " +b.getId()+" has been modified." + "New Arrival Time : " + modifyScheduledFlightDTO.getArrivalTime() +"and Departure Time : "+modifyScheduledFlightDTO.getDepartureTime());
+               emailServiceImpl.sendSimpleMail(emailDetails);
+           }
+
+           return true;
+       }catch (Exception e){
+           return false;
+       }
+    }
+
+    public ScheduledFlight getScheduledFlightbyId(Integer scheduledFlightNumber) {
+        return scheduleFlightRepository.findById(scheduledFlightNumber).get();
+    }
 }

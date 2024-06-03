@@ -28,22 +28,22 @@ public class FlightService {
     }
 
     public boolean updateFlight(Flight flight) {
-        
+
         try {
-            Flight oldFlight=flightRepository.findById(flight.getFlightNumber()).get();
-             flightRepository.save(flight);
-             return true;
+            Flight oldFlight = flightRepository.findById(flight.getFlightNumber()).get();
+            flightRepository.save(flight);
+            return true;
         } catch (Exception e) {
             return false;
         }
-       
+
     }
 
     public boolean deleteFlight(Flight flight) {
         try {
-            Flight oldFlight=flightRepository.findById(flight.getFlightNumber()).get();
-             flightRepository.deleteById(flight.getFlightNumber());
-             return true;
+            Flight oldFlight = flightRepository.findById(flight.getFlightNumber()).get();
+            flightRepository.deleteById(flight.getFlightNumber());
+            return true;
         } catch (Exception e) {
             return false;
         }
@@ -51,13 +51,12 @@ public class FlightService {
 
     public Flight getFlightbyId(Integer id) {
         try {
-        Optional<Flight> optionalFlight = flightRepository.findById(id);
-        return optionalFlight.orElse(null); 
+            Optional<Flight> optionalFlight = flightRepository.findById(id);
+            return optionalFlight.orElse(null);
         } catch (Exception e) {
             return null;
         }
-        
-    }
 
+    }
 
 }

@@ -1,28 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Booking Confirmation</title>
+    <title>Infosys-FMS Booking Confirmation </title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
         }
         .container {
             width: 80%;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
+            background-color: #fff;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 2px 2px 12px #aaa;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .header {
             text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #007bff;
         }
         .details {
             margin-top: 20px;
         }
+        .details h2 {
+            color: #343a40;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .details p {
+            margin: 5px 0;
+            color: #495057;
+        }
+        .details p strong {
+            color: #343a40;
+        }
+        .details .info-section {
+            display: flex;
+            justify-content: space-between;
+        }
+        .details .info-section > div {
+            width: 48%;
+        }
         .details table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 10px;
         }
         .details th, .details td {
             border: 1px solid #ddd;
@@ -30,6 +59,10 @@
             text-align: left;
         }
         .details th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .details tr:nth-child(even) {
             background-color: #f2f2f2;
         }
     </style>
@@ -40,31 +73,44 @@
         <h1>Booking Confirmation</h1>
     </div>
     <div class="details">
-
         <h2>User Information</h2>
-        <p><strong>Name:</strong> <span th:text="${booking.user.userName}"></span></p>
-        <p><strong>Email:</strong> <span th:text="${booking.user.email}"></span></p>
-
+        <div class="info-section">
+            <div>
+                <p><strong>Name:</strong> <span th:text="${booking.user.userName}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${booking.user.email}"></span></p>
+            </div>
+        </div>
 
         <h2>Booking Details</h2>
-        <p><strong>Booking ID:</strong> <span th:text="${booking.id}"></span></p>
-        <p><strong>Booking Date:</strong> <span th:text="${booking.bookingDate}"></span></p>
-        <p><strong>Ticket Cost:</strong> $<span th:text="${booking.ticketCost}"></span></p>
+        <div class="info-section">
+            <div>
+                <p><strong>Booking ID:</strong> <span th:text="${booking.id}"></span></p>
+                <p><strong>Booking Date:</strong> <span th:text="${booking.bookingDate}"></span></p>
+                <p><strong>Ticket Cost:</strong> $<span th:text="${booking.ticketCost}"></span></p>
+            </div>
+        </div>
 
         <h2>Flight Details</h2>
-        <p><strong>Flight Number:</strong> <span th:text="${booking.scheduledFlight.flight.flightNumber}"></span></p>
-        <p><strong>Flight Carrier Name:</strong> <span th:text="${booking.scheduledFlight.flight.carrierName}"></span></p>
-        <p><strong>Flight Number:</strong> <span th:text="${booking.scheduledFlight.flight.model}"></span></p>
+        <div class="info-section">
+            <div>
+                <p><strong>Flight Number:</strong> <span th:text="${booking.scheduledFlight.flight.flightNumber}"></span></p>
+                <p><strong>Flight Carrier Name:</strong> <span th:text="${booking.scheduledFlight.flight.carrierName}"></span></p>
+                <p><strong>Flight Model:</strong> <span th:text="${booking.scheduledFlight.flight.model}"></span></p>
+            </div>
+        </div>
 
+        <h2>Schedule Details</h2>
+        <div class="info-section">
+            <div>
+                <p><strong>Arrival Time:</strong> <span th:text="${booking.scheduledFlight.schedule.arrivalTime}"></span></p>
+                <p><strong>Departure Time:</strong> <span th:text="${booking.scheduledFlight.schedule.departureTime}"></span></p>
 
-        <h2>Source Details</h2>
-        <p><strong>Departure:</strong> <span th:text="${booking.scheduledFlight.schedule.departureTime}"></span></p>
-        <p><strong>Arrival:</strong> <span th:text="${booking.scheduledFlight.schedule.arrivalTime}"></span></p>
-        <p><strong>Src Airport</strong> <span th:text="${booking.scheduledFlight.schedule.sourceAirport.airportName}"></span></p>
-
-
-        <h2>Destination Details</h2>
-        <p><strong>Dst Airport</strong> <span th:text="${booking.scheduledFlight.schedule.destinationAirport.airportName}"></span></p>
+            </div>
+            <div>
+                <p><strong>Source Airport:</strong> <span th:text="${booking.scheduledFlight.schedule.sourceAirport.airportName}"></span></p>
+                <p><strong>Destination Airport:</strong> <span th:text="${booking.scheduledFlight.schedule.destinationAirport.airportName}"></span></p>
+            </div>
+        </div>
 
         <h2>Passenger List</h2>
         <table>

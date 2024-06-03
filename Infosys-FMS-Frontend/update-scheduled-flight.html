@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Scheduled Flight</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="datetime-local"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Update Scheduled Flight</h1>
+    <form id="updateFlightForm">
+        <div class="form-group">
+            <label for="arrivalTime">Arrival Time</label>
+            <input type="datetime-local" id="arrivalTime" name="arrivalTime" required>
+        </div>
+        <div class="form-group">
+            <label for="departureTime">Departure Time</label>
+            <input type="datetime-local" id="departureTime" name="departureTime" required>
+        </div>
+        <div class="form-group">
+            <label for="ticketPrice">Ticket Price</label>
+            <input type="number" id="ticketPrice" name="ticketPrice" required>
+        </div>
+        <button type="submit">Update Flight</button>
+        <p id="responseMessage"></p>
+    </form>
+</div>
+
+<script >
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const scheduledFlightNumber = urlParams.get('id');
+    const jwtToken = localStorage.getItem('Token');
+
+    const arrivalTimeInput = document.getElementById('arrivalTime');
+    const departureTimeInput = document.getElementById('departureTime');
+    const ticketPriceInput = document.getElementById('ticketPrice');
+    const responseMessage = document.getElementById('responseMessage');
+    const updateFlightForm = document.getElementById('updateFlightForm');
+
+    if (!scheduledFlightNumber) {
+        responseMessage.innerHTML = '<p>Invalid flight ID.</p>';
+        return;
+    }
+
+    fetch(`http://localhost:8080/getscheduledflight/${scheduledFlightNumber}`, {
+        method: 'GET',
+        headers: {
+            
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const  arrivalTime=data.schedule.arrivalTime;
+        const  departureTime=data.schedule.departureTime;
+        const ticketPrice=data.ticketPrice;
+        arrivalTimeInput.value = new Date(arrivalTime).toISOString().slice(0, -1);
+        departureTimeInput.value = new Date(departureTime).toISOString().slice(0, -1);
+        ticketPriceInput.value = ticketPrice;
+    })
+    .catch(error => {
+        console.error('Error fetching flight details:', error);
+        responseMessage.innerHTML = '<p>Error fetching flight details. Please try again later.</p>';
+    });
+
+    updateFlightForm.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const updatedFlight = {
+            scheduledFlightId: scheduledFlightNumber,
+            arrivalTime: new Date(arrivalTimeInput.value).toISOString(),
+            departureTime: new Date(departureTimeInput.value).toISOString(),
+            ticketPrice: parseInt(ticketPriceInput.value)
+        };
+
+        fetch('http://localhost:8080/modifyscheduledflight', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwtToken}`
+            },
+            body: JSON.stringify(updatedFlight)
+        })
+        .then(response => {
+            if (response.ok) {
+                responseMessage.innerHTML = '<p>Flight updated successfully.</p>';
+            } else {
+                responseMessage.innerHTML = '<p>Failed to update flight.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error updating flight:', error);
+            responseMessage.innerHTML = '<p>Error updating flight. Please try again later.</p>';
+        });
+    });
+});
+
+</script>
+
+</body>
+</html>

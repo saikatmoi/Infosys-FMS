@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+
 
 @Entity
 @Data
@@ -22,7 +24,7 @@ public class Passenger {
     
     private String name;
     private int age;
-    private int uin;
+    private BigInteger uin;
 
 
 

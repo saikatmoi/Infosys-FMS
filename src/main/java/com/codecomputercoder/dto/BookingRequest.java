@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class BookingRequest {
 
 private int scheduledFlightId;
-private int userId;
 private List<Passenger> passengerList;
 
 

@@ -10,10 +10,35 @@
             background-color: #f0f2f5;
             margin: 0;
             padding: 0;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 10px 20px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
+            color: white;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .navbar ul li a:hover {
+            text-decoration: underline;
         }
         .container {
             max-width: 600px;
@@ -21,11 +46,11 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             padding: 20px;
-            margin: 20px;
+            margin: 20px auto;
         }
         h1 {
             text-align: center;
-            color: #007bff;
+            color: #042649;
         }
         .form-group {
             margin-bottom: 15px;
@@ -113,6 +138,14 @@
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <h1> Infosys-FMS (User)</h1>
+        <ul>
+            <li><a href="user.html">Dashboard</a></li>
+            <li><a href="mybookings.html">My Bookings</a></li>
+            
+        </ul>
+    </div>
 
 <div class="container">
     <h1>Search Flight to Book</h1>
@@ -135,9 +168,6 @@
         <input type="date" id="travelDate">
     </div>
     <button id="searchButton" disabled>Search Flights</button><br>
-    <div class="centered-link">
-        <a href="mybookings.html">Show My Bookings</a>
-    </div>
     <div id="results"></div>
 </div>
 

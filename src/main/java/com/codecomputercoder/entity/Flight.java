@@ -31,13 +31,14 @@ public class Flight {
     private String model;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "flight",fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "flight",cascade=CascadeType.ALL)
     private List<ScheduledFlight> scheduledFlights=new ArrayList<>();
 
 
     public void addScheduledFlight(ScheduledFlight scheduledFlight) {
+        scheduledFlight.setFlight(this);
         scheduledFlights.add(scheduledFlight);
-        //scheduledFlight.setFlight(this);
+
     }
 
     // public void removeScheduledFlight(ScheduledFlight scheduledFlight) {

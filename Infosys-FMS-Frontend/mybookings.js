@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(response => response.json())
     .then(data => {
+        
         displayBookings(data);
     })
     .catch(error => {

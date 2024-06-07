@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.engine.internal.Cascade;
 
 
 @Entity
@@ -22,10 +23,10 @@ public class ScheduledFlight {
     private Long id;
 
     //@JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     private Flight flight;
     //@JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(cascade= CascadeType.ALL)
     private Schedule schedule;
     @Version
     private Long version;
@@ -35,8 +36,12 @@ public class ScheduledFlight {
     private int bookedSeats;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "scheduledFlight",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "scheduledFlight",orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 
+
+    public void addBooking(Booking b){
+        bookings.add(b);
+    }
 
 }

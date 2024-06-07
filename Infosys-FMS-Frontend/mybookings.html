@@ -11,6 +11,35 @@
         body {
             font-family: Arial, sans-serif;
         }
+        .navbar {
+            background-color: #007bff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .navbar ul li a:hover {
+            text-decoration: underline;
+        }
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -43,6 +72,14 @@
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <h1> Infosys-FMS (User)</h1>
+        <ul>
+            <li><a href="user.html">Dashboard</a></li>
+            <li><a href="mybookings.html">My Bookings</a></li>
+            
+        </ul>
+    </div>
 
 <div class="container">
     <h1>My Bookings</h1>

@@ -1,6 +1,8 @@
 package com.codecomputercoder.entity;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,17 +34,9 @@ public class Schedule {
     private Airport sourceAirport;
     @ManyToOne
     private Airport destinationAirport;
-    private Date arrivalTime;
-    private Date departureTime;
+    private LocalDateTime arrivalTime;
+    private LocalDateTime departureTime;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "schedule",fetch = FetchType.EAGER,cascade=CascadeType.ALL)
-    private List<ScheduledFlight> scheduledFlights=new ArrayList<>();
-
-    public void addScheduledFlight(ScheduledFlight scheduledFlight) {
-        scheduledFlights.add(scheduledFlight);
-        //scheduledFlight.setFlight(this);
-    }
 
 
 }

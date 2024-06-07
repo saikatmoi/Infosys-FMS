@@ -57,7 +57,7 @@ public class SchedulingController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteScheduledFlights(@PathVariable Integer scheduledFlightNumber){
 
-
+        System.out.println("Delete Called.");
         if(scheduleFlightService.deleteScheduledFlightbyId(scheduledFlightNumber)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

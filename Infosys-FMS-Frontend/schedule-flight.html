@@ -8,19 +8,46 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .navbar ul li a:hover {
+            text-decoration: underline;
         }
         .container {
             background-color: #fff;
-            padding: 20px 30px;
+            padding: 5px 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             text-align: center;
             width: 500px;
+            margin: 20px auto;
         }
         h1 {
             color: #333;
@@ -67,6 +94,16 @@
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <h1> Infosys-FMS (Admin)</h1>
+        <ul>
+            <li><a href="admin.html">Dashboard</a></li>
+            <li><a href="add-flight.html">Add Flight</a></li>
+            <li><a href="modify-flight.html">Modify Flights</a></li>
+            <li><a href="schedule-flight.html">Schedule Flight</a></li>
+            <li><a href="modify-scheduled-flight.html">Modify/View Scheduled Flight</a></li>
+        </ul>
+    </div>
     <div class="container">
         <h1>Schedule Flight</h1>
         <form id="scheduleFlightForm">
@@ -104,9 +141,6 @@
             <button type="submit">Schedule Flight</button>
         </form>
         <p id="responseMessage"></p>
-        <div class="centered-link">
-            <a href="admin.html">Go Back to the Admin Page</a>
-        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {

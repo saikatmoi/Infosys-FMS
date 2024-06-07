@@ -7,15 +7,46 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .navbar ul li a:hover {
+            text-decoration: underline;
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             border-radius: 8px;
+            margin: 20px auto;
         }
         h1 {
             color: #333;
@@ -82,12 +113,25 @@
         .actions a.delete {
             background-color: #dc3545;
         }
+        .actions a.view {
+            background-color: #a315b674;
+        }
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <h1> Infosys-FMS (Admin)</h1>
+        <ul>
+            <li><a href="admin.html">Dashboard</a></li>
+            <li><a href="add-flight.html">Add Flight</a></li>
+            <li><a href="modify-flight.html">Modify Flights</a></li>
+            <li><a href="schedule-flight.html">Schedule Flight</a></li>
+            <li><a href="modify-scheduled-flight.html">Modify/View Scheduled Flight</a></li>
+        </ul>
+    </div>
 
 <div class="container">
-    <h1>Search Flight to Modify</h1>
+    <h1>Search Flight to Modify / View</h1>
     <div class="form-group select-inline">
         <div>
             <label for="sourceAirport">Source Airport</label>
@@ -175,6 +219,7 @@
                         flightItem.innerHTML = `
                             <p>Flight ${flight.flight.flightNumber} - ${flight.flight.carrierName} (${flight.flight.model})</p>
                             <div class="actions">
+                                <a href="admin-view-bookings.html?id=${flight.id}" class="view">View Bookings</a>
                                 <a href="update-scheduled-flight.html?id=${flight.id}" class="update">Update</a>
                                 <a href="#" class="delete" data-id="${flight.id}">Delete</a>
                             </div>

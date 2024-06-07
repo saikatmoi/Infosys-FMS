@@ -79,6 +79,17 @@ public class BookingController {
        
     }
 
+    @GetMapping("/viewscheduledflightbookings/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> viewScheduledFlightBookings(@PathVariable Integer id) {
+
+        List<Booking> bookings=bookingService.viewScheduledFlightBookings(id);
+
+
+        return new ResponseEntity<>(bookings,HttpStatus.OK);
+
+    }
+
 
 
 

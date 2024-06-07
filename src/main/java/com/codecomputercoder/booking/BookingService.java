@@ -45,18 +45,12 @@ public class BookingService {
         booking.setTicketCost(bookingRequest.getPassengerList().size() * scheduledFlight.getTicketPrice());
         booking.setUser(user);
         booking.setBookingDate(new Date());
-        List<Booking> bookings = user.getBookings();
-        bookings.add(booking);
-        user.setBookings(bookings);
-        bookings = scheduledFlight.getBookings();
-        bookings.add(booking);
         booking.setScheduledFlight(scheduledFlight);
+        booking = bookingRepository.save(booking);
         scheduledFlight.setBookedSeats(scheduledFlight.getBookedSeats() + bookingRequest.getPassengerList().size());
-        scheduledFlight.setBookings(bookings);
+        scheduledFlight.addBooking(booking);
+        scheduleFlightRepository.save(scheduledFlight);
 
-            userRepository.save(user);
-            scheduleFlightRepository.save(scheduledFlight);
-            booking = bookingRepository.save(booking);
             sendTicket(booking);
             return true;
 
@@ -85,6 +79,7 @@ public class BookingService {
             int noPassengers = booking.getPassengerList().size();
             ScheduledFlight scheduledFlight = booking.getScheduledFlight();
             scheduledFlight.setBookedSeats(scheduledFlight.getBookedSeats() - noPassengers);
+
             scheduleFlightRepository.save(scheduledFlight);
             bookingRepository.deleteById(id);
             EmailDetails emailDetails=new EmailDetails(booking.getUser().getEmail(),"","Booking Cancelled","");
@@ -109,4 +104,9 @@ public class BookingService {
         }
     }
 
+    public List<Booking> viewScheduledFlightBookings(Integer id) {
+        ScheduledFlight scheduledFlight= scheduleFlightRepository.findById(id).get();
+        return scheduledFlight.getBookings();
+
+    }
 }

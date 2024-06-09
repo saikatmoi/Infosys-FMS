@@ -105,6 +105,8 @@ public class ScheduleFlightService {
            Schedule schedule = scheduledFlight.getSchedule();
            schedule.setArrivalTime(modifyScheduledFlightDTO.getArrivalTime());
            schedule.setDepartureTime(modifyScheduledFlightDTO.getDepartureTime());
+           System.out.println(modifyScheduledFlightDTO.getArrivalTime());
+           System.out.println(modifyScheduledFlightDTO.getDepartureTime());
            scheduledFlight.setSchedule(schedule);
            scheduleFlightRepository.save(scheduledFlight);
            for(Booking b: scheduledFlight.getBookings()){

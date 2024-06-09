@@ -53,24 +53,36 @@
             text-align: center;
         }
         .booking {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 2px solid #ddd;
             padding: 10px 0;
             background-color: #f9f9f9;
+            margin-bottom: 20px;
+            border-left: 5px solid #007bff;
+            padding-left: 15px;
+            border-radius: 5px;
         }
         .booking:nth-child(odd) {
-            background-color: #f1f1f1;
+            background-color: #eef6ff;
         }
         .booking p {
             margin: 5px 0;
         }
-        .passenger-list {
-            margin-left: 20px;
+        .passenger-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
-        .passenger {
-            margin: 5px 0;
+        .passenger-table th, .passenger-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
-        .passenger p {
-            margin: 3px 0;
+        .passenger-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .passenger-table tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
         #responseMessage {
             text-align: center;
@@ -130,16 +142,26 @@
                         <p><strong>Ticket Cost:</strong> ${booking.ticketCost}</p>
                         <p><strong>User:</strong> ${booking.user.userName}</p>
                         <p><strong>Passengers:</strong></p>
-                        <div class="passenger-list">
-                            ${booking.passengerList.map(passenger => `
-                                <div class="passenger">
-                                    <p><strong>PNR Number:</strong> ${passenger.pnrNumber}</p>
-                                    <p><strong>Name:</strong> ${passenger.name}</p>
-                                    <p><strong>Age:</strong> ${passenger.age}</p>
-                                    <p><strong>UIN:</strong> ${passenger.uin}</p>
-                                </div>
-                            `).join('')}
-                        </div>
+                        <table class="passenger-table">
+                            <thead>
+                                <tr>
+                                    <th>PNR Number</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>UIN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${booking.passengerList.map(passenger => `
+                                    <tr>
+                                        <td>${passenger.pnrNumber}</td>
+                                        <td>${passenger.name}</td>
+                                        <td>${passenger.age}</td>
+                                        <td>${passenger.uin}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
                     `;
                     bookingsContainer.appendChild(bookingElement);
                 });

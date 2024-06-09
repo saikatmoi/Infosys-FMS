@@ -142,8 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const  arrivalTime=data.schedule.arrivalTime;
         const  departureTime=data.schedule.departureTime;
         const ticketPrice=data.ticketPrice;
-        arrivalTimeInput.value = new Date(arrivalTime).toISOString().slice(0, -1);
-        departureTimeInput.value = new Date(departureTime).toISOString().slice(0, -1);
+        arrivalTimeInput.value = arrivalTime;
+        departureTimeInput.value = departureTime;
         ticketPriceInput.value = ticketPrice;
     })
     .catch(error => {
@@ -156,10 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const updatedFlight = {
             scheduledFlightId: scheduledFlightNumber,
-            arrivalTime: new Date(arrivalTimeInput.value).toISOString(),
-            departureTime: new Date(departureTimeInput.value).toISOString(),
+            arrivalTime: arrivalTimeInput.value,
+            departureTime: departureTimeInput.value,
             ticketPrice: parseInt(ticketPriceInput.value)
         };
+        console.log(updatedFlight);
 
         fetch('http://localhost:8080/modifyscheduledflight', {
             method: 'PUT',
